@@ -67,7 +67,7 @@
                         </div>
                         <div v-for="content in getFiles" class="file-box">
                             <div v-if="content.type.includes('image')" class="file">
-                                <a :href="content.path" data-gallery="">
+                                <a :href="content.path" data-gallery="" :data-download-url="content.path">
                                     <span class="corner"></span>
 
                                     <div class="image">
@@ -148,6 +148,7 @@
         <a class="next">›</a>
         <a class="close">×</a>
         <a class="play-pause"></a>
+        <a target="_blank" class="download">Download</a>
         <ol class="indicator"></ol>
     </div>
     <div class="modal inmodal fade" id="convert-modal" tabindex="-1" role="dialog" aria-hidden="true">

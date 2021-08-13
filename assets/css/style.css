@@ -9553,3 +9553,9 @@ body.md-skin {
     margin: 0;
   }
 }
+
+.blueimp-gallery > .download {
+  position:absolute;
+  left: 20px;
+  bottom: 20px;
+}

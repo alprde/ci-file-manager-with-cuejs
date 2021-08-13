@@ -151,6 +151,13 @@
         }
     }).mount("#app");
 </script>
+
+<script>
+    $('#blueimp-gallery').on('slide', function (event, index, slide) {
+        var url = $(this).data('gallery').list[index].getAttribute('data-download-url');
+        $(this).find('.download').prop('href', url).prop('download', url);
+    });
+</script>
 </body>
 
 </html>
