@@ -91,7 +91,7 @@
             },
             getFiles(){
                 console.log("getFiles çalıştı.");
-                let filterFiles = this.contents.filter(item => item.type != "directory" && item.name.toLowerCase().includes(this.searchText.toLowerCase()));
+                let filterFiles = this.contents.filter(item => item.type != "directory" && (item.name.toLowerCase().includes(this.searchText.toLowerCase()) || item.created_date.toLowerCase().includes(this.searchText.toLowerCase())));
                 this.files = filterFiles.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
                 this.countOfPage = Math.ceil(filterFiles.length / this.perPage)
                 return this.files
