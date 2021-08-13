@@ -1,1 +1,1 @@
-# ci-file-manager-with-cuejs
+# ci-file-manager-with-vuejs
