@@ -6,7 +6,7 @@
     <link href="<?php echo base_url("assets"); ?>/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body id="app">
 
 <div id="wrapper">
 
@@ -39,6 +39,7 @@
                 currentPage: 1,
                 perPage: 12,
                 countOfPage: 0,
+                searchText: '',
             }
         },
         methods: {
@@ -90,7 +91,7 @@
             },
             getFiles(){
                 console.log("getFiles çalıştı.");
-                let filterFiles = this.contents.filter(item => item.type != "directory");
+                let filterFiles = this.contents.filter(item => item.type != "directory" && item.name.toLowerCase().includes(this.searchText.toLowerCase()));
                 this.files = filterFiles.slice((this.currentPage - 1) * this.perPage, this.currentPage * this.perPage)
                 this.countOfPage = Math.ceil(filterFiles.length / this.perPage)
                 return this.files
@@ -108,17 +109,6 @@
                     }
                     console.log(pageNumbers)
                 }
-
-                // if(this.currentPage >= 5){
-                //     pageNumbers.push({
-                //         text: "...",
-                //         page: this.currentPage
-                //     })
-                //     pageNumbers.push({
-                //         text: this.currentPage,
-                //         page: this.currentPage
-                //     })
-                // }
 
                 if(this.countOfPage - this.currentPage >= 5){
                     pageNumbers.push({
