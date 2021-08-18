@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ini_set('max_execution_time', 30000);
-use WebPConvert\WebPConvert;
+ini_set("gd.jpeg_ignore_warning", 1);
+//use WebPConvert\WebPConvert;
+//use WebPConvert\Loggers\EchoLogger;
+use WebPConvert\Convert\Converters\Stack;
 
 class Dashboard extends CI_Controller {
 
@@ -106,8 +109,21 @@ class Dashboard extends CI_Controller {
         if($file->type == "file" && in_array($file->extension, $extensions)){
             $source = $file->path;
             $destination = $source . '.webp';
-            $options = [];
-            $convertResponse = WebPConvert::convert($source, $destination, $options);
+            $options = [
+
+                // PS: only set converters if you have strong reasons to do so
+                'converters' => [
+                    'cwebp', 'vips', 'imagick', 'gmagick', 'imagemagick', 'graphicsmagick', 'gd'
+                ],
+
+                // Any available options can be set here, they dribble down to all converters.
+                'metadata' => 'all',
+
+                // To override for specific converter, you can prefix with converter id:
+                'cwebp-metadata' => 'exif',
+
+            ];
+            $convertResponse = Stack::convert($source, $destination, $options, $logger=null);
             $result["convertResponse"] = $convertResponse;
             $result["status"] = "complete";
         }

@@ -168,14 +168,23 @@
                 </div>
                 Toplam resim sayısı: {{images.length}} <br>
                 Dönüştürülen resim sayısı: {{convertedFileCount}} <br>
+                <div class="alert alert-warning" v-if="convertIsStart">Dönüştürme işlemi başladı. İşlem bitene kadar bu sayfayı yenilemeyin ya da kapatmayın!!!</div>
             </div>
             <div class="modal-body" style="height: 400px; overflow: auto;">
+                <div class="image-item" v-if="failFiles.length != 0 && !convertIsStart" v-for="image in failFiles"
+                     style="border-bottom: 2px solid #cecece; margin-bottom: 5px;">
+                    <div class="stream-small" style="display: flex; justify-content: space-between;">
+                        <span class="text-muted"> {{image.folder}} </span>
+                        <span class="label label-danger" v-if="image.status == 'error'"> Hata</span>
+                    </div>
+                </div>
                 <div class="image-item" v-for="image in images"
                      style="border-bottom: 2px solid #cecece; margin-bottom: 5px;">
                     <div class="stream-small" style="display: flex; justify-content: space-between;">
                         <span class="text-muted"> {{image.folder}} </span>
                         <span class="label label-success" v-if="image.status == 'complete'"> Tamamlandı</span>
                         <span class="label label-primary" v-if="image.status == 'uncomplete'"> Tamamlanmadı</span>
+                        <span class="label label-danger" v-if="image.status == 'error'"> Hata</span>
                     </div>
                 </div>
             </div>

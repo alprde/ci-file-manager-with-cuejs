@@ -33,6 +33,7 @@
                 folders: [],
                 files: [],
                 images: [],
+                failFiles: [],
                 convertIsStart: false,
                 convertedFileCount: 0,
                 convertPercentage: 0,
@@ -64,21 +65,39 @@
             },
             convertToWebp(file){
                 this.convertIsStart = true;
+
+                if(this.convertedFileCount == 0){
+                    this.failFiles = []
+                }
+
                 let params = new FormData();
                 params.append('file', JSON.stringify(file));
                 axios.post("<?php echo base_url("Dashboard/convertToWebp/") ?>", params).then( response => {
                     console.log(response.data)
-                    if(response.data.status == "complete"){
-                        console.log("dönüştürme başarılı")
-                        file.status = "complete";
-                        this.convertedFileCount++;
+                    if(typeof response.data != "string"){
+                        if(response.data.status == "complete"){
+                            console.log("dönüştürme başarılı")
+                            file.status = "complete";
+                            this.convertedFileCount++;
+                            if((this.convertedFileCount + 1) <= this.images.length){
+                                this.convertToWebp(this.images[this.convertedFileCount]);
+                            }else{
+                                this.convertIsStart = false;
+                                this.convertedFileCount = 0;
+                            }
+                        }
+                    }else{
+                        file.status = "error";
+                        this.failFiles.push(this.images[this.convertedFileCount])
+                        this.convertedFileCount++
                         if((this.convertedFileCount + 1) <= this.images.length){
                             this.convertToWebp(this.images[this.convertedFileCount]);
                         }else{
                             this.convertIsStart = false;
+                            this.convertedFileCount = 0;
                         }
-                        this.convertPercentage = (this.convertedFileCount / this.images.length) * 100;
                     }
+                    this.convertPercentage = (this.convertedFileCount / this.images.length) * 100;
                 })
                 console.log(file);
             },
